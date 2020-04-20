@@ -22,7 +22,8 @@
 static const double R = 44100;        /* sample rate (samples per second) */
 static const double maxamp = 1.0;     /* max. amplitude */
 
-static double freq(int n)
+static double
+freq(int n)
 {
 	double f;
 
@@ -97,43 +98,50 @@ play_major_chord(int startnote, double duration, double loudness)
 	}
 }
 
+static void
+play_section(int notes[], int chord, double notelen, double vol)
+{
+	play_note(notes[0], notelen * 1, vol);
+	if (chord) {
+		play_major_chord(notes[1], notelen * 3, vol);
+	} else {
+		play_note(notes[1], notelen * 3, vol);
+	}
+
+	play_note(notes[2], notelen * 2, vol);
+	play_note(notes[3], notelen * 1, vol);
+
+	if (chord) {
+		play_major_chord(notes[4], notelen * 3, vol);
+	} else {
+		play_note(notes[4], notelen * 3, vol);
+	}
+
+	play_note(notes[5], notelen * 2, vol);
+
+	/* short pause */
+	play_note(0, 0.01, 0.0);
+}
+
 
 int
 main()
 {
 	double vol = 0.5;
 	double notelen = 0.15;
+	int sec1[] = {40, 45, 40, 42, 44, 37};
+	int sec2[] = {37, 42, 40, 38, 40, 33};
+	int sec3[] = {33, 35, 35, 37, 38, 38};
 
-	play_note(40, notelen * 1, vol);
-	play_major_chord(45, notelen * 3, vol);
+	int sec4[] = {40, 49, 47, 45, 47, 40};
+	int sec5[] = {40, 45, 44, 42, 44, 37};
 
-	play_note(40, notelen * 2, vol);
-	play_note(42, notelen * 1, vol);
-	play_major_chord(44, notelen * 3, vol);
-	play_note(37, notelen * 2, vol);
+	int sec6[] = {37, 42, 40, 38, 40, 33};
+	int sec7[] = {33, 45, 44, 42, 40, 0};
 
-	/* short pause */
-	play_note(37, 0.01, vol);
-
-	play_note(37, notelen * 1, vol);
-	play_major_chord(42, notelen * 3, vol);
-
-	play_note(40, notelen * 2, vol);
-	play_note(38, notelen * 1, vol);
-	play_major_chord(40, notelen * 3, vol);
-	play_note(33, notelen * 2, vol);
-
-	play_note(0, 0.01, vol);
-
-	play_note(33, notelen * 1, vol);
-	play_major_chord(35, notelen * 3, vol);
-
-	play_note(35, notelen * 2, vol);
-	play_note(37, notelen * 1, vol);
-	play_major_chord(38, notelen * 3, vol);
-	play_note(38, notelen * 2, vol);
-
-	play_note(0, 0.01, vol);
+	play_section(sec1, 1, notelen, vol);
+	play_section(sec2, 1, notelen, vol);
+	play_section(sec3, 1, notelen, vol);
 
 	play_note(40, notelen * 1, vol);
 	play_major_chord(42, notelen * 3, vol);
@@ -141,6 +149,14 @@ main()
 	play_note(44, notelen * 2, vol);
 	play_note(45, notelen * 1, vol);
 	play_major_chord(47, notelen * 4, vol);
+
+	play_note(0, notelen, 0.0);
+
+	play_section(sec4, 0, notelen, vol);
+	play_section(sec5, 0, notelen, vol);
+
+	play_section(sec6, 1, notelen, vol);
+	play_section(sec7, 1, notelen, vol);
 
 	return 0;
 }
