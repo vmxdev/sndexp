@@ -153,7 +153,7 @@ main()
 	play_note(0, notelen, 0.0);
 
 	play_section(sec4, 0, notelen, vol);
-	play_section(sec5, 0, notelen, vol);
+	play_section(sec5, 1, notelen, vol);
 
 	play_section(sec6, 1, notelen, vol);
 	play_section(sec7, 1, notelen, vol);
