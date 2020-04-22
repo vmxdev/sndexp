@@ -10,6 +10,9 @@
  * and convert using ffmpeg
  * $ ffmpeg -f s16le -ar 44.1k -ac 2 -i sound.pcm sound.wav
  *
+ * convert to .ogg
+ * $ ffmpeg -i sound.wav  -acodec libvorbis sound.ogg
+ *
  * to make video from single image
  * $ ffmpeg -loop 1 -i image.png -i sound.wav -c:v libx264 -tune stillimage \
  *     -c:a aac -b:a 192k -pix_fmt yuv420p -shortest sound.mp4
