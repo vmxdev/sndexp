@@ -131,14 +131,14 @@ instr_tom(double t, int note)
 static double
 instr_cym(double t, int note)
 {
-	double tone = exp(-t*70) * tan(2*M_PI*t*freq(note) * exp(-t*70));
+	double tone = exp(-t*25) * tan(2*M_PI*t*freq(note) * exp(-t*25));
 	return tone;
 }
 
 static double
 instr_cym2(double t, int note)
 {
-	double tone = exp(-t*20) * sin(2*M_PI*t*freq(note) * exp(-t*20));
+	double tone = exp(-t*10) * sin(2*M_PI*t*freq(note) * exp(-t*10));
 	return tone;
 }
 
