@@ -184,7 +184,12 @@ main(int argc, char *argv[])
 	double notelen = 60.0 / bpm / 4.0;
 	double where;
 	double fr;
-	double ks[7] = {1.0, 3.0/4.0, 4.0/3.0, 5.0/4.0, 2.0/3.0, 3.0/2.0, 2.0};
+	double ks[9] = {1.0,
+		3.0/4.0, 4.0/3.0,
+		5.0/4.0,
+		2.0/3.0, 3.0/2.0,
+		4.0/5.0, 5.0/6.0,
+		2.0};
 	int i;
 
 	struct timeline *tl;
@@ -203,13 +208,15 @@ main(int argc, char *argv[])
 		double len;
 
 		if ((rand() % 2) == 1) {
-			fr *= ks[rand() % 7];
+			fr *= ks[rand() % 9];
 		} else {
-			fr /= ks[rand() % 7];
+			fr /= ks[rand() % 9];
 		}
 		len = notelen * (rand() % 8);
 		add_note(tl, where, fr, len, vol * 0.5, &instr_piano);
 		where += len;
+
+		fprintf(stderr, "len: %f, freq: %f\n", len, fr);
 	}
 
 	timeline_play(tl);
