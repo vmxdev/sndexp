@@ -221,6 +221,8 @@ main()
 	double notelen = 60.0 / bpm / 4.0;
 	double where, where_cym;
 	double fr;
+	double frr;
+	double speedup = 0.99;
 	int i, j;
 
 	struct timeline *tl;
@@ -277,7 +279,8 @@ main()
 		}
 	}
 
-	for (j=0; j<2; j++) {
+	frr = 440.0 / 4;
+	for (j=0; j<8; j++) {
 		fr = 440.0 / 4;
 
 		add_major_chord(tl, where, fr, notelen * 2, vol);
@@ -293,53 +296,62 @@ main()
 		where += notelen * 6;
 
 		for (i=0; i<8; i++) {
-			add_major_chord(tl, where, fr, notelen * 1.5, vol);
+			add_major_chord(tl, where, frr, notelen * 1.5, vol);
 			where += notelen * 2;
-			fr /= 1.03;
+
+			frr /= 1.01;
 		}
+
+		notelen *= speedup;
 	}
 
+	/* drums */
+	notelen = 60.0 / bpm / 4.0;
 	where_cym += notelen * 2;
 	{
-		add_note(tl, where_cym, 10e7, notelen * 3, vol, 100.0, &instr_cym2);
+		add_note(tl, where_cym, 10e7, notelen * 1, vol, 100.0, &instr_cym2);
 		where_cym += notelen * 4.5;
 
-		add_note(tl, where_cym, 10e7, notelen * 3, vol, 100.0, &instr_cym2);
+		add_note(tl, where_cym, 10e7, notelen * 1, vol, 100.0, &instr_cym2);
 		where_cym += notelen * 4.5;
 
-		add_note(tl, where_cym, 10e7, notelen * 3, vol, 100.0, &instr_cym2);
+		add_note(tl, where_cym, 10e7, notelen * 1, vol, 100.0, &instr_cym2);
 		where_cym += notelen * 4.5;
 
-		add_note(tl, where_cym, 10e7, notelen * 3, vol, 100.0, &instr_cym2);
+		add_note(tl, where_cym, 10e7, notelen * 1, vol, 100.0, &instr_cym2);
 		where_cym += notelen * 4.5;
 
 		for (i=0; i<4; i++) {
-			add_note(tl, where_cym, 10e7, notelen * 3, vol, 100.0, &instr_cym2);
+			add_note(tl, where_cym, 10e7, notelen * 1, vol, 100.0, &instr_cym2);
 			where_cym += notelen * 4;
 		}
 	}
-	for (j=0; j<2; j++) {
-		add_note(tl, where_cym - notelen * 2, 200, notelen * 3, vol, 100.0, &instr_tom);
-		add_note(tl, where_cym, 10e7, notelen * 3, vol, 100.0, &instr_cym2);
+
+	for (j=0; j<8; j++) {
+		double tom_freq = 300;
+
+		add_note(tl, where_cym - notelen * 2, tom_freq, notelen * 3, vol, 100.0, &instr_tom);
+		add_note(tl, where_cym, 10e7, notelen * 1, vol, 100.0, &instr_cym2);
 		where_cym += notelen * 4.5;
 
-		add_note(tl, where_cym - notelen * 2, 200, notelen * 3, vol, 100.0, &instr_tom);
-		add_note(tl, where_cym, 10e7, notelen * 3, vol, 100.0, &instr_cym2);
+		add_note(tl, where_cym - notelen * 2, tom_freq, notelen * 3, vol, 100.0, &instr_tom);
+		add_note(tl, where_cym, 10e7, notelen * 1, vol, 100.0, &instr_cym2);
 		where_cym += notelen * 4.5;
 
-		add_note(tl, where_cym - notelen * 2, 200, notelen * 3, vol, 100.0, &instr_tom);
-		add_note(tl, where_cym, 10e7, notelen * 3, vol, 100.0, &instr_cym2);
+		add_note(tl, where_cym - notelen * 2, tom_freq, notelen * 3, vol, 100.0, &instr_tom);
+		add_note(tl, where_cym, 10e7, notelen * 1, vol, 100.0, &instr_cym2);
 		where_cym += notelen * 4.5;
 
-		add_note(tl, where_cym - notelen * 2, 200, notelen * 3, vol, 100.0, &instr_tom);
-		add_note(tl, where_cym, 10e7, notelen * 3, vol, 100.0, &instr_cym2);
+		add_note(tl, where_cym - notelen * 2, tom_freq, notelen * 3, vol, 100.0, &instr_tom);
+		add_note(tl, where_cym, 10e7, notelen * 1, vol, 100.0, &instr_cym2);
 		where_cym += notelen * 4.5;
 
 		for (i=0; i<4; i++) {
-			add_note(tl, where_cym - notelen * 2, 200, notelen * 3, vol, 100.0, &instr_tom);
-			add_note(tl, where_cym, 10e7, notelen * 3, vol, 100.0, &instr_cym2);
+			add_note(tl, where_cym - notelen * 2, tom_freq, notelen * 3, vol, 100.0, &instr_tom);
+			add_note(tl, where_cym, 10e7, notelen * 1, vol, 100.0, &instr_cym2);
 			where_cym += notelen * 4;
 		}
+		notelen *= speedup;
 	}
 
 	timeline_play(tl);
