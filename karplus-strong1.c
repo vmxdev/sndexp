@@ -123,7 +123,7 @@ karplus_strong(struct timeline *tl, double start, double fr,
 	for (t=tstart; t<tend; t++) {
 		double tone;
 
-		init_waveform[c] = ((init_waveform[c] + prev) / 2.0) * 0.99f;
+		init_waveform[c] = ((init_waveform[c] + prev) / 2.0) * 0.9999f;
 		tone = init_waveform[c];
 		prev = tone;
 		c = (c + 1) % init_len;
@@ -151,10 +151,14 @@ static void
 karplus_major_chord(struct timeline *tl, double start, double fr,
 	double duration, double loudness)
 {
-	karplus_strong(tl, start, fr, duration, loudness);
-	karplus_strong(tl, start, fr * 1.26f, duration, loudness);
-	karplus_strong(tl, start, fr * 1.26f * 1.19f, duration, loudness);
-	karplus_strong(tl, start, fr * 2.0f, duration, loudness);
+	karplus_strong(tl, start, fr, duration, loudness / 6.0);
+	karplus_strong(tl, start + 0.001, fr * 1.26f, duration, loudness / 6.0);
+	karplus_strong(tl, start + 0.002, fr * 1.26f * 1.19f, duration, loudness / 6.0);
+	karplus_strong(tl, start + 0.003, fr * 2.0f, duration, loudness / 6.0);
+	karplus_strong(tl, start + 0.004, fr * 2.0f * 1.26f,
+		duration, loudness / 6.0);
+	karplus_strong(tl, start + 0.005, fr * 2.0f * 1.26f * 1.19f,
+		duration, loudness / 6.0);
 }
 
 int
@@ -166,7 +170,7 @@ main()
 	double notelen = 60.0 / bpm / 4.0;
 	double where;
 	double fr;
-	int i;
+	int i, j;
 
 	struct timeline *tl;
 
@@ -176,7 +180,31 @@ main()
 	}
 
 	where = 0.0;
-	fr = 261.63f;
+	fr = 261.63f / 2.0;
+
+	for (j=0; j<4; j++) {
+		for (i=0; i<8; i++) {
+			karplus_major_chord(tl, where, fr, notelen * 1, vol);
+			where += notelen * 1;
+		}
+
+		for (i=0; i<8; i++) {
+			karplus_major_chord(tl, where, fr * 1.33f, notelen * 1, vol);
+			where += notelen * 1;
+		}
+	}
+
+	for (j=0; j<3; j++) {
+		for (i=0; i<8; i++) {
+			karplus_major_chord(tl, where, fr, notelen * 1, vol);
+			where += notelen * 1;
+		}
+
+		for (i=0; i<8; i++) {
+			karplus_major_chord(tl, where, fr * 1.33f, notelen * 1, vol);
+			where += notelen * 1;
+		}
+	}
 
 	for (i=0; i<8; i++) {
 		karplus_major_chord(tl, where, fr, notelen * 1, vol);
@@ -184,18 +212,7 @@ main()
 	}
 
 	for (i=0; i<8; i++) {
-		karplus_major_chord(tl, where, fr * 1.33f, notelen * 1, vol);
-		where += notelen * 1;
-	}
-
-	for (i=0; i<8; i++) {
-		karplus_major_chord(tl, where, fr * 1.33f * 1.33f,
-			notelen * 1, vol);
-		where += notelen * 1;
-	}
-
-	for (i=0; i<8; i++) {
-		karplus_major_chord(tl, where, fr, notelen * 1, vol);
+		karplus_major_chord(tl, where, fr / 1.33f, notelen * 1, vol);
 		where += notelen * 1;
 	}
 
